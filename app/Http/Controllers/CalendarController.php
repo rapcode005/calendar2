@@ -8,15 +8,6 @@ use App\Traits\DateTime\DateTime;
 	
 class CalendarController extends Controller
 {	
-	public function show()
-    {
-        $dateFrom = date_format(date_create('2020-01-31'), "Y-m-d");
-        $dateTo = date_format(date_create('2020-03-31'), "Y-m-d");
-
-        return ["From" => $dateFrom,
-                "To" => $dateTo];
-    }
-
     public function store(Request $request)
     {
         $request->validate([

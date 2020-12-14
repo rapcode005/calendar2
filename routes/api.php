@@ -15,7 +15,6 @@ use App\Http\Controller\CalendarController;
 |
 */
 Route::prefix('v1')->group(function () {
-    Route::get('/calendar', App\Http\Controllers\CalendarController::class.'@show');
     Route::post('/calendar', App\Http\Controllers\CalendarController::class.'@store');
 });
 
