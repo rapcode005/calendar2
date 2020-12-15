@@ -13,8 +13,7 @@ class CalendarController extends Controller
         $request->validate([
             'Event' => 'required',
             'DateFrom' => 'required',
-            'DateTo' => 'required',
-            'Day' => 'required'
+            'DateTo' => 'required'
         ]);
 		
 		//Check if Valid Dates
@@ -40,20 +39,34 @@ class CalendarController extends Controller
             return response()->json($response);
 		}
         
-		$days = $request->Day;
-		
+        $days = $request->Day;
+        $CMon = "";
+        $CYear = 0;
+        
         calendar::truncate();
         while ($dateFrom <= $dateTo) {
 			$dateInt = strtotime(date_format($dateFrom,"Y-m-d"));
+            $dayN = date('d', $dateInt);
             $day = date('D', $dateInt);
-            if(in_array($day, $days))
-                $allData = [ 'event' => $request->Event,
-                'dates' => $dateFrom];
-            else
-                $allData = ['dates' => $dateFrom];
-			
-			calendar::create($allData);
-            date_add($dateFrom, date_interval_create_from_date_string("1 day"));
+            $year = date('Y', $dateInt);
+            $mon = date('M', $dateInt);
+            if ($CYear != $year || $CMon != $mon) {
+                $allData = ['mon' => $mon.' '.(string)$year];
+                calendar::create($allData);
+                $CMon = $mon;
+                $CYear = $year;
+            }
+            else {
+                if(in_array($day, $days))
+                    $allData = [ 'event' => $request->Event, 
+                    'day' => $day.' '.(string)$dayN];
+                else
+                    $allData = [
+                    'day' => $day.' '.(string)$dayN];
+                
+                calendar::create($allData);
+                date_add($dateFrom, date_interval_create_from_date_string("1 day"));
+            }
         }
 
         return calendar::all();

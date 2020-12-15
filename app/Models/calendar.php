@@ -11,6 +11,8 @@ class calendar extends Model
 
     protected $fillable = [
         'event',
-        'dates'
+        'mon',
+        'year',
+        'day'
     ];
 }
